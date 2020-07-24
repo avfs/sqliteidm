@@ -1,0 +1,44 @@
+name: CI
+on:
+  push:
+    branch:
+      tags-ignore:
+        - v[0-9]+\.[0-9]+\.[0-9]+
+    pull_request:
+
+jobs:
+  test:
+    env :
+      GO111MODULE: on
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: [1.13.x, 1.14.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          stable: 'false'
+          go-version: ${{ matrix.go-version }}
+
+      - name: golangci-lint on linux
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        uses: golangci/golangci-lint-action@v2
+        with:
+          # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
+          version: v1.28
+
+      - name: Run tests
+        run: go test -run=. -race -v -covermode=atomic -coverprofile=./coverage.txt ./...
+
+      - name: Upload linux coverage to Codecov
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.txt
