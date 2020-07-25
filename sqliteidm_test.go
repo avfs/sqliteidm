@@ -57,6 +57,8 @@ func TestMemFsWithSqliteIdm(t *testing.T) {
 		t.Fatalf("sqliteidm.New : want error to be nil, got %v", err)
 	}
 
+	defer idm.Close()
+
 	fs, err := memfs.New(memfs.OptMainDirs(), memfs.OptIdm(idm))
 	if err != nil {
 		t.Fatalf("New : want err to be nil, got %s", err)
