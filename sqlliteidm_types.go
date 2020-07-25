@@ -18,7 +18,7 @@ package sqliteidm
 
 import "database/sql"
 
-type SqliteIdm struct {
+type SQLiteIdm struct {
 	db          *sql.DB
 	userAdd     *sql.Stmt
 	userDel     *sql.Stmt

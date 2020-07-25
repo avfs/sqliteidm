@@ -24,7 +24,7 @@ import (
 )
 
 // New create a new identity manager.
-func New(dsn string) (*SqliteIdm, error) {
+func New(dsn string) (*SQLiteIdm, error) {
 	db, err := sql.Open("sqlite3", dsn)
 	if err != nil {
 		return nil, err
@@ -107,7 +107,7 @@ func New(dsn string) (*SqliteIdm, error) {
 		return nil, err
 	}
 
-	idm := &SqliteIdm{
+	idm := &SQLiteIdm{
 		db:          db,
 		userAdd:     userAdd,
 		userDel:     userDel,
@@ -122,7 +122,7 @@ func New(dsn string) (*SqliteIdm, error) {
 	return idm, nil
 }
 
-func (idm *SqliteIdm) Close() error {
+func (idm *SQLiteIdm) Close() error {
 	_ = idm.groupAdd.Close()
 	_ = idm.groupDel.Close()
 	_ = idm.groupLook.Close()
@@ -137,16 +137,16 @@ func (idm *SqliteIdm) Close() error {
 }
 
 // Type returns the type of the fileSystem or Identity manager.
-func (idm *SqliteIdm) Type() string {
-	return "SqliteIdm"
+func (idm *SQLiteIdm) Type() string {
+	return "SQLiteIdm"
 }
 
 // Features returns the set of features provided by the file system or identity manager.
-func (idm *SqliteIdm) Features() avfs.Feature {
+func (idm *SQLiteIdm) Features() avfs.Feature {
 	return avfs.FeatIdentityMgr
 }
 
 // HasFeature returns true if the file system or identity manager provides a given feature.
-func (idm *SqliteIdm) HasFeature(feature avfs.Feature) bool {
+func (idm *SQLiteIdm) HasFeature(feature avfs.Feature) bool {
 	return avfs.FeatIdentityMgr&feature == feature
 }

@@ -14,6 +14,7 @@
 //  limitations under the License.
 //
 
+// SQLiteIdm is an Identity manager backed by a SQLite database for AVFS.
 package sqliteidm
 
 import (
@@ -24,7 +25,7 @@ import (
 )
 
 // GroupAdd adds a new group.
-func (idm *SqliteIdm) GroupAdd(name string) (avfs.GroupReader, error) {
+func (idm *SQLiteIdm) GroupAdd(name string) (avfs.GroupReader, error) {
 	r, err := idm.groupAdd.Exec(name)
 	if err != nil {
 		if e, ok := err.(sqlite3.Error); ok && e.ExtendedCode == sqlite3.ErrConstraintUnique {
@@ -45,7 +46,7 @@ func (idm *SqliteIdm) GroupAdd(name string) (avfs.GroupReader, error) {
 }
 
 // GroupDel deletes an existing group.
-func (idm *SqliteIdm) GroupDel(name string) error {
+func (idm *SQLiteIdm) GroupDel(name string) error {
 	r, err := idm.groupDel.Exec(name)
 	if err != nil {
 		return err
@@ -61,7 +62,7 @@ func (idm *SqliteIdm) GroupDel(name string) error {
 
 // LookupGroup looks up a group by name.
 // If the group cannot be found, the returned error is of type UnknownGroupError.
-func (idm *SqliteIdm) LookupGroup(name string) (avfs.GroupReader, error) {
+func (idm *SQLiteIdm) LookupGroup(name string) (avfs.GroupReader, error) {
 	row := idm.groupLook.QueryRow(name)
 
 	var gid int
@@ -85,7 +86,7 @@ func (idm *SqliteIdm) LookupGroup(name string) (avfs.GroupReader, error) {
 
 // LookupGroupId looks up a group by groupid.
 // If the group cannot be found, the returned error is of type UnknownGroupIdError.
-func (idm *SqliteIdm) LookupGroupId(gid int) (avfs.GroupReader, error) {
+func (idm *SQLiteIdm) LookupGroupId(gid int) (avfs.GroupReader, error) {
 	row := idm.groupLookId.QueryRow(gid)
 
 	var name string
@@ -109,7 +110,7 @@ func (idm *SqliteIdm) LookupGroupId(gid int) (avfs.GroupReader, error) {
 
 // LookupUser looks up a user by username.
 // If the user cannot be found, the returned error is of type UnknownUserError.
-func (idm *SqliteIdm) LookupUser(name string) (avfs.UserReader, error) {
+func (idm *SQLiteIdm) LookupUser(name string) (avfs.UserReader, error) {
 	row := idm.userLook.QueryRow(name)
 
 	var uid, gid int
@@ -134,7 +135,7 @@ func (idm *SqliteIdm) LookupUser(name string) (avfs.UserReader, error) {
 
 // LookupUserId looks up a user by userid.
 // If the user cannot be found, the returned error is of type UnknownUserIdError.
-func (idm *SqliteIdm) LookupUserId(uid int) (avfs.UserReader, error) {
+func (idm *SQLiteIdm) LookupUserId(uid int) (avfs.UserReader, error) {
 	row := idm.userLookId.QueryRow(uid)
 
 	var (
@@ -161,7 +162,7 @@ func (idm *SqliteIdm) LookupUserId(uid int) (avfs.UserReader, error) {
 }
 
 // UserAdd adds a new user.
-func (idm *SqliteIdm) UserAdd(name, groupName string) (avfs.UserReader, error) {
+func (idm *SQLiteIdm) UserAdd(name, groupName string) (avfs.UserReader, error) {
 	g, err := idm.LookupGroup(groupName)
 	if err != nil {
 		return nil, err
@@ -188,7 +189,7 @@ func (idm *SqliteIdm) UserAdd(name, groupName string) (avfs.UserReader, error) {
 }
 
 // UserDel deletes an existing group.
-func (idm *SqliteIdm) UserDel(name string) error {
+func (idm *SQLiteIdm) UserDel(name string) error {
 	r, err := idm.userDel.Exec(name)
 	if err != nil {
 		return err

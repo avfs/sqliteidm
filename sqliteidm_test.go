@@ -29,7 +29,7 @@ import (
 var (
 
 	// MemIdm implements avfs.IdentityMgr interface.
-	_ avfs.IdentityMgr = &sqliteidm.SqliteIdm{}
+	_ avfs.IdentityMgr = &sqliteidm.SQLiteIdm{}
 
 	// User implements avfs.UserReader interface.
 	_ avfs.UserReader = &sqliteidm.User{}
