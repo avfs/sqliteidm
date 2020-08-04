@@ -3,6 +3,6 @@ module github.com/avfs/sqliteidm
 go 1.13
 
 require (
-	github.com/avfs/avfs v0.8.0
+	github.com/avfs/avfs v0.10.0
 	github.com/mattn/go-sqlite3 v1.14.0
 )

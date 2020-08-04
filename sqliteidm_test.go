@@ -19,9 +19,8 @@ package sqliteidm_test
 import (
 	"testing"
 
-	"github.com/avfs/avfs/fs/memfs"
-
 	"github.com/avfs/avfs"
+	"github.com/avfs/avfs/fs/memfs"
 	"github.com/avfs/avfs/test"
 	"github.com/avfs/sqliteidm"
 )
@@ -47,8 +46,8 @@ func TestSqliteIdmAll(t *testing.T) {
 
 	defer idm.Close()
 
-	ci := test.NewConfigIdm(t, idm)
-	ci.SuiteAll()
+	sidm := test.NewSuiteIdm(t, idm)
+	sidm.All()
 }
 
 func TestMemFsWithSqliteIdm(t *testing.T) {
@@ -64,6 +63,6 @@ func TestMemFsWithSqliteIdm(t *testing.T) {
 		t.Fatalf("New : want err to be nil, got %s", err)
 	}
 
-	cf := test.NewConfigFs(t, fs)
-	cf.SuiteAll()
+	sfs := test.NewSuiteFs(t, fs)
+	sfs.All()
 }
