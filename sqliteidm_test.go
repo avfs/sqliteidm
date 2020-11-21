@@ -38,7 +38,7 @@ var (
 	_ avfs.GroupReader = &sqliteidm.Group{}
 )
 
-// InitDB
+// InitDB initialize the database.
 func InitDB(t *testing.T) *sql.DB {
 	db, err := sql.Open("sqlite3", ":memory:")
 	if err != nil {
