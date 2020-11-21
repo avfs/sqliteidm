@@ -17,6 +17,7 @@
 package sqliteidm_test
 
 import (
+	"database/sql"
 	"testing"
 
 	"github.com/avfs/avfs"
@@ -37,9 +38,21 @@ var (
 	_ avfs.GroupReader = &sqliteidm.Group{}
 )
 
+// InitDB
+func InitDB(t *testing.T) *sql.DB {
+	db, err := sql.Open("sqlite3", ":memory:")
+	if err != nil {
+		t.Fatalf("sql.Open : want error to be nil, got %v", err)
+	}
+
+	return db
+}
+
 // TestSqliteIdmAll run all tests.
 func TestSqliteIdmAll(t *testing.T) {
-	idm, err := sqliteidm.New(":memory:")
+	db := InitDB(t)
+
+	idm, err := sqliteidm.New(db)
 	if err != nil {
 		t.Fatalf("New : want error to be nil, got %v", err)
 	}
@@ -51,7 +64,9 @@ func TestSqliteIdmAll(t *testing.T) {
 }
 
 func TestMemFsWithSqliteIdm(t *testing.T) {
-	idm, err := sqliteidm.New(":memory:")
+	db := InitDB(t)
+
+	idm, err := sqliteidm.New(db)
 	if err != nil {
 		t.Fatalf("sqliteidm.New : want error to be nil, got %v", err)
 	}

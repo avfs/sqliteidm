@@ -24,13 +24,8 @@ import (
 )
 
 // New create a new identity manager.
-func New(dsn string) (*SQLiteIdm, error) {
-	db, err := sql.Open("sqlite3", dsn)
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.Ping()
+func New(db *sql.DB) (*SQLiteIdm, error) {
+	err := db.Ping()
 	if err != nil {
 		return nil, err
 	}
@@ -39,10 +34,10 @@ func New(dsn string) (*SQLiteIdm, error) {
 	create table if not exists groups
 	(
 		gid integer primary key autoincrement,
-		name text not null unique 
+		name text not null unique
 	);
 
-	insert into groups(gid, name) 
+	insert into groups(gid, name)
 		values
 		       (-1, 'invalid group'),
 		       (0, 'root')
@@ -57,9 +52,9 @@ func New(dsn string) (*SQLiteIdm, error) {
 				on update set default on delete set default
 	);
 
-	insert into users(uid, name, gid) 
+	insert into users(uid, name, gid)
 		values (0, 'root', 0)
-		on conflict do nothing;	
+		on conflict do nothing;
 	`
 
 	_, err = db.Exec(sqlDBCreate)
