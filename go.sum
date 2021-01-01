@@ -1,4 +1,4 @@
-github.com/avfs/avfs v0.12.0 h1:xGU5lzRK4QqkczKgvC4QF9DM/78VR0dGH+mANGrckDo=
-github.com/avfs/avfs v0.12.0/go.mod h1:yeMJILK/ziYAMahyMHM4VZyTxJE+UkbZh3SE02OJmhg=
+github.com/avfs/avfs v0.14.0 h1:Tak8QXcqa6S/xfmcdr4yN2W9iy0gKz4A3GLKd4v7Hok=
+github.com/avfs/avfs v0.14.0/go.mod h1:yeMJILK/ziYAMahyMHM4VZyTxJE+UkbZh3SE02OJmhg=
 github.com/mattn/go-sqlite3 v1.14.5 h1:1IdxlwTNazvbKJQSxoJ5/9ECbEeaTTyeU7sEAZ5KKTQ=
 github.com/mattn/go-sqlite3 v1.14.5/go.mod h1:WVKg1VTActs4Qso6iwGbiFih2UIHo0ENGwNd0Lj+XmI=

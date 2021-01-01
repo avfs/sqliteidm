@@ -21,8 +21,8 @@ import (
 	"testing"
 
 	"github.com/avfs/avfs"
-	"github.com/avfs/avfs/fs/memfs"
 	"github.com/avfs/avfs/test"
+	"github.com/avfs/avfs/vfs/memfs"
 	"github.com/avfs/sqliteidm"
 )
 
@@ -78,6 +78,6 @@ func TestMemFsWithSqliteIdm(t *testing.T) {
 		t.Fatalf("New : want err to be nil, got %s", err)
 	}
 
-	sfs := test.NewSuiteFs(t, fs)
+	sfs := test.NewSuiteFS(t, fs)
 	sfs.All()
 }
