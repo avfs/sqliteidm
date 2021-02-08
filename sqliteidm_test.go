@@ -60,7 +60,7 @@ func TestSqliteIdmAll(t *testing.T) {
 	defer idm.Close()
 
 	sidm := test.NewSuiteIdm(t, idm)
-	sidm.All(t)
+	sidm.TestAll(t)
 }
 
 func TestMemFsWithSqliteIdm(t *testing.T) {
@@ -79,5 +79,5 @@ func TestMemFsWithSqliteIdm(t *testing.T) {
 	}
 
 	sfs := test.NewSuiteFS(t, fs)
-	sfs.All(t)
+	sfs.TestAll(t)
 }
