@@ -28,9 +28,13 @@ jobs:
       - name: Run tests
         run: go test -run=. -race -v -covermode=atomic -coverprofile=./coverage.txt ./...
 
-      - name: Upload linux coverage to Codecov
-        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
+        env:
+          OS: ${{ matrix.os }}
+          GO: ${{ matrix.go }}
         with:
-          env_vars: os,go
-          file: ./coverage.txt
+          env_vars: OS,GO
+          files: ./coverage.txt
+          flags: unittests
+          verbose: false
