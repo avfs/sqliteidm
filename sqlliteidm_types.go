@@ -19,15 +19,7 @@ package sqliteidm
 import "database/sql"
 
 type SQLiteIdm struct {
-	db          *sql.DB
-	userAdd     *sql.Stmt
-	userDel     *sql.Stmt
-	userLook    *sql.Stmt
-	userLookId  *sql.Stmt
-	groupAdd    *sql.Stmt
-	groupDel    *sql.Stmt
-	groupLook   *sql.Stmt
-	groupLookId *sql.Stmt
+	db *sql.DB
 }
 
 // User is the implementation of avfs.UserReader.

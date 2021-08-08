@@ -64,70 +64,12 @@ func New(db *sql.DB) (*SQLiteIdm, error) {
 		return nil, err
 	}
 
-	groupAdd, err := db.Prepare("insert into groups(name) values (?)")
-	if err != nil {
-		return nil, err
-	}
-
-	groupDel, err := db.Prepare("delete from groups where name = ?")
-	if err != nil {
-		return nil, err
-	}
-
-	groupLook, err := db.Prepare("select gid from groups where name = ?")
-	if err != nil {
-		return nil, err
-	}
-
-	groupLookId, err := db.Prepare("select name from groups where gid = ?")
-	if err != nil {
-		return nil, err
-	}
-
-	userAdd, err := db.Prepare("insert into users(name, gid) values (?, ?)")
-	if err != nil {
-		return nil, err
-	}
-
-	userDel, err := db.Prepare("delete from users where name = ?")
-	if err != nil {
-		return nil, err
-	}
-
-	userLook, err := db.Prepare("select uid, gid from users where name = ?")
-	if err != nil {
-		return nil, err
-	}
-
-	userLookId, err := db.Prepare("select name, gid from users where uid = ?")
-	if err != nil {
-		return nil, err
-	}
-
-	idm := &SQLiteIdm{
-		db:          db,
-		userAdd:     userAdd,
-		userDel:     userDel,
-		userLook:    userLook,
-		userLookId:  userLookId,
-		groupAdd:    groupAdd,
-		groupDel:    groupDel,
-		groupLook:   groupLook,
-		groupLookId: groupLookId,
-	}
+	idm := &SQLiteIdm{db: db}
 
 	return idm, nil
 }
 
 func (idm *SQLiteIdm) Close() error {
-	_ = idm.groupAdd.Close()
-	_ = idm.groupDel.Close()
-	_ = idm.groupLook.Close()
-	_ = idm.groupLookId.Close()
-	_ = idm.userAdd.Close()
-	_ = idm.userDel.Close()
-	_ = idm.userLook.Close()
-	_ = idm.userLookId.Close()
 	err := idm.db.Close()
 
 	return err
