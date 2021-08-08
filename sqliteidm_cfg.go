@@ -20,7 +20,9 @@ import (
 	"database/sql"
 
 	"github.com/avfs/avfs"
-	_ "github.com/mattn/go-sqlite3" // Sqlite database driver
+
+	// Sqlite database driver
+	_ "github.com/mattn/go-sqlite3"
 )
 
 // New create a new identity manager.

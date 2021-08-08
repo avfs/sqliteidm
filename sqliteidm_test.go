@@ -73,10 +73,7 @@ func TestMemFsWithSqliteIdm(t *testing.T) {
 
 	defer idm.Close()
 
-	fs, err := memfs.New(memfs.WithMainDirs(), memfs.WithIdm(idm))
-	if err != nil {
-		t.Fatalf("New : want err to be nil, got %s", err)
-	}
+	fs := memfs.New(memfs.WithMainDirs(), memfs.WithIdm(idm))
 
 	sfs := test.NewSuiteFS(t, fs)
 	sfs.TestAll(t)

@@ -14,7 +14,7 @@
 //  limitations under the License.
 //
 
-// SQLiteIdm is an Identity manager backed by a SQLite database for AVFS.
+// Package sqliteidm is an Identity manager backed by a SQLite database for AVFS.
 package sqliteidm
 
 import (
