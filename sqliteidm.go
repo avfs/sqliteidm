@@ -24,6 +24,16 @@ import (
 	"github.com/mattn/go-sqlite3"
 )
 
+// AdminGroup returns the administrator (root) group.
+func (idm *SQLiteIdm) AdminGroup() avfs.GroupReader {
+	return idm.adminGroup
+}
+
+// AdminUser returns the administrator (root) user.
+func (idm *SQLiteIdm) AdminUser() avfs.UserReader {
+	return idm.adminUser
+}
+
 // GroupAdd adds a new group.
 func (idm *SQLiteIdm) GroupAdd(name string) (avfs.GroupReader, error) {
 	stmt, err := idm.db.Prepare("insert into groups(name) values (?)")
@@ -271,8 +281,8 @@ func (u *User) Gid() int {
 	return u.gid
 }
 
-// IsRoot returns true if the user has root privileges.
-func (u *User) IsRoot() bool {
+// IsAdmin returns true if the user has administrator (root) privileges.
+func (u *User) IsAdmin() bool {
 	return u.uid == 0 || u.gid == 0
 }
 

@@ -64,7 +64,24 @@ func New(db *sql.DB) (*SQLiteIdm, error) {
 		return nil, err
 	}
 
-	idm := &SQLiteIdm{db: db}
+	idm := &SQLiteIdm{
+		db:    db,
+		utils: avfs.Cfg.Utils(),
+	}
+
+	adminGroupName := idm.utils.AdminGroupName()
+	adminUserName := idm.utils.AdminUserName()
+
+	idm.adminGroup = &Group{
+		name: adminGroupName,
+		gid:  0,
+	}
+
+	idm.adminUser = &User{
+		name: adminUserName,
+		uid:  0,
+		gid:  0,
+	}
 
 	return idm, nil
 }
@@ -81,11 +98,11 @@ func (idm *SQLiteIdm) Type() string {
 }
 
 // Features returns the set of features provided by the file system or identity manager.
-func (idm *SQLiteIdm) Features() avfs.Feature {
+func (idm *SQLiteIdm) Features() avfs.Features {
 	return avfs.FeatIdentityMgr
 }
 
 // HasFeature returns true if the file system or identity manager provides a given feature.
-func (idm *SQLiteIdm) HasFeature(feature avfs.Feature) bool {
+func (idm *SQLiteIdm) HasFeature(feature avfs.Features) bool {
 	return avfs.FeatIdentityMgr&feature == feature
 }

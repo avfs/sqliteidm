@@ -16,10 +16,17 @@
 
 package sqliteidm
 
-import "database/sql"
+import (
+	"database/sql"
+
+	"github.com/avfs/avfs"
+)
 
 type SQLiteIdm struct {
-	db *sql.DB
+	adminGroup *Group     // Administrator Group.
+	adminUser  *User      // Administrator User.
+	db         *sql.DB    // Database handle.
+	utils      avfs.Utils // Utils regroups common functions used by emulated file systems.
 }
 
 // User is the implementation of avfs.UserReader.
