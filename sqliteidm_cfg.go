@@ -27,6 +27,24 @@ import (
 
 // New create a new identity manager.
 func New(db *sql.DB) (*SQLiteIdm, error) {
+	ut := avfs.Cfg.Utils()
+	adminGroupName := ut.AdminGroupName()
+	adminUserName := ut.AdminUserName()
+
+	idm := &SQLiteIdm{
+		adminGroup: &Group{
+			name: adminGroupName,
+			gid:  0,
+		},
+		adminUser: &User{
+			name: adminUserName,
+			uid:  0,
+			gid:  0,
+		},
+		db:    db,
+		utils: ut,
+	}
+
 	err := db.Ping()
 	if err != nil {
 		return nil, err
@@ -42,7 +60,7 @@ func New(db *sql.DB) (*SQLiteIdm, error) {
 	insert into groups(gid, name)
 		values
 		       (-1, 'invalid group'),
-		       (0, 'root')
+		       (0, ?)
 		on conflict do nothing;
 
 	create table if not exists users
@@ -55,32 +73,13 @@ func New(db *sql.DB) (*SQLiteIdm, error) {
 	);
 
 	insert into users(uid, name, gid)
-		values (0, 'root', 0)
+		values (0, ?, 0)
 		on conflict do nothing;
 	`
 
-	_, err = db.Exec(sqlDBCreate)
+	_, err = db.Exec(sqlDBCreate, adminGroupName, adminUserName)
 	if err != nil {
 		return nil, err
-	}
-
-	idm := &SQLiteIdm{
-		db:    db,
-		utils: avfs.Cfg.Utils(),
-	}
-
-	adminGroupName := idm.utils.AdminGroupName()
-	adminUserName := idm.utils.AdminUserName()
-
-	idm.adminGroup = &Group{
-		name: adminGroupName,
-		gid:  0,
-	}
-
-	idm.adminUser = &User{
-		name: adminUserName,
-		uid:  0,
-		gid:  0,
 	}
 
 	return idm, nil
