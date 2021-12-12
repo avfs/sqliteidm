@@ -27,7 +27,6 @@ import (
 )
 
 var (
-
 	// MemIdm implements avfs.IdentityMgr interface.
 	_ avfs.IdentityMgr = &sqliteidm.SQLiteIdm{}
 
