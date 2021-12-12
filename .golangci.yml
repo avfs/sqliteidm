@@ -80,8 +80,6 @@ linters-settings:
     # run `go tool vet help` to see all analyzers
     enable-all: true
     disable-all: false
-#    disable:
-#      - fieldalignment
   lll:
     line-length: 140
     tab-width: 1
@@ -164,15 +162,23 @@ linters:
   disable-all: true
   enable:
     - asciicheck
+    - bidichk
     - bodyclose
+    - contextcheck
+    #- cyclop
     - deadcode
     - depguard
     - dogsled
+    - durationcheck
     #- dupl
     - errcheck
+    - errname
     #- errorlint
     #- exhaustive
+    #- exhaustivestruct
     - exportloopref
+    - forbidigo
+    - forcetypeassert
     #- funlen
     - gci
     - gochecknoglobals
@@ -193,29 +199,50 @@ linters:
     #- gosec
     - gosimple
     - govet
+    #- ifshort
     - ineffassign
+    - importas
+    #- interfacer
+    #- ireturn
     - lll
+    - makezero
+    #- maligned
+    #- nestif
     - misspell
     - nakedret
+    #- nilerr
     - nlreturn
     #- nestif
+    #- nilerr
+    - nilnil
     - noctx
     - nolintlint
+    #- paralleltest
     - prealloc
+    - predeclared
+    - promlinter
     - revive
     - rowserrcheck
+    #- scopelint
     - sqlclosecheck
     - staticcheck
     - structcheck
     - stylecheck
+    - tagliatelle
+    - tenv
     - testpackage
+    #- thelper
+    - tparallel
     - typecheck
     - unconvert
     - unparam
     - unused
     - varcheck
+    #- varnamelen
     - vet
+    - wastedassign
     - whitespace
+    #- wrapcheck
     - wsl
 
 issues:
@@ -223,6 +250,7 @@ issues:
   exclude-rules:
     - text: ".*id.* should be .*ID.*"
       linters:
+        - golint
         - revive
         - stylecheck
     - text: "exported: exported const"
@@ -232,5 +260,8 @@ issues:
       linters:
         - godox
     - text: "appendAssign: append result not assigned to the same slice"
+      linters:
+        - gocritic
+    - text: "preferStringWriter"
       linters:
         - gocritic

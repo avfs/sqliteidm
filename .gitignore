@@ -6,11 +6,8 @@
 *.so
 *.dylib
 
-# go test coverage
-coverage*.txt
-
-# binaries
-bin
+# temporary files
+tmp
 
 # editors
 .idea
