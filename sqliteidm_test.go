@@ -27,6 +27,7 @@ import (
 )
 
 var (
+
 	// MemIdm implements avfs.IdentityMgr interface.
 	_ avfs.IdentityMgr = &sqliteidm.SQLiteIdm{}
 
@@ -72,8 +73,8 @@ func TestMemFsWithSqliteIdm(t *testing.T) {
 
 	defer idm.Close()
 
-	fs := memfs.New(memfs.WithMainDirs(), memfs.WithIdm(idm))
+	vfs := memfs.New(memfs.WithMainDirs(), memfs.WithIdm(idm))
 
-	sfs := test.NewSuiteFS(t, fs)
+	sfs := test.NewSuiteFS(t, vfs)
 	sfs.TestAll(t)
 }
