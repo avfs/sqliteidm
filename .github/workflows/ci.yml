@@ -24,7 +24,7 @@ jobs:
         uses: golangci/golangci-lint-action@v3
 
       - name: Run tests
-        run: go test -run=. -race -v -covermode=atomic -coverprofile=./tmp/cover_test.txt ./...
+        run: go test -run=. -race -v -covermode=atomic -coverprofile=./cover_test.txt ./...
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
@@ -33,6 +33,6 @@ jobs:
           GO: ${{ matrix.go }}
         with:
           env_vars: os,go
-          files: ./tmp/cover_test.txt
+          files: ./cover_test.txt
           flags: unittests
           verbose: true

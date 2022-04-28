@@ -9,6 +9,9 @@
 # temporary files
 tmp
 
+# coverage
+cover_test.txt
+
 # editors
 .idea
 .vscode
