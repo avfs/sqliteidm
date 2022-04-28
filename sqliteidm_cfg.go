@@ -20,31 +20,11 @@ import (
 	"database/sql"
 
 	"github.com/avfs/avfs"
-
-	// Sqlite database driver
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3" // Sqlite database driver
 )
 
 // New create a new identity manager.
 func New(db *sql.DB) (*SQLiteIdm, error) {
-	ut := avfs.Cfg.Utils()
-	adminGroupName := ut.AdminGroupName()
-	adminUserName := ut.AdminUserName()
-
-	idm := &SQLiteIdm{
-		adminGroup: &Group{
-			name: adminGroupName,
-			gid:  0,
-		},
-		adminUser: &User{
-			name: adminUserName,
-			uid:  0,
-			gid:  0,
-		},
-		db:    db,
-		utils: ut,
-	}
-
 	err := db.Ping()
 	if err != nil {
 		return nil, err
@@ -60,7 +40,7 @@ func New(db *sql.DB) (*SQLiteIdm, error) {
 	insert into groups(gid, name)
 		values
 		       (-1, 'invalid group'),
-		       (0, ?)
+		       (0, 'root')
 		on conflict do nothing;
 
 	create table if not exists users
@@ -73,19 +53,94 @@ func New(db *sql.DB) (*SQLiteIdm, error) {
 	);
 
 	insert into users(uid, name, gid)
-		values (0, ?, 0)
+		values (0, 'root', 0)
 		on conflict do nothing;
 	`
 
-	_, err = db.Exec(sqlDBCreate, adminGroupName, adminUserName)
+	_, err = db.Exec(sqlDBCreate)
 	if err != nil {
 		return nil, err
+	}
+
+	groupAdd, err := db.Prepare("insert into groups(name) values (?)")
+	if err != nil {
+		return nil, err
+	}
+
+	groupDel, err := db.Prepare("delete from groups where name = ?")
+	if err != nil {
+		return nil, err
+	}
+
+	groupLook, err := db.Prepare("select gid from groups where name = ?")
+	if err != nil {
+		return nil, err
+	}
+
+	groupLookId, err := db.Prepare("select name from groups where gid = ?")
+	if err != nil {
+		return nil, err
+	}
+
+	userAdd, err := db.Prepare("insert into users(name, gid) values (?, ?)")
+	if err != nil {
+		return nil, err
+	}
+
+	userDel, err := db.Prepare("delete from users where name = ?")
+	if err != nil {
+		return nil, err
+	}
+
+	userLook, err := db.Prepare("select uid, gid from users where name = ?")
+	if err != nil {
+		return nil, err
+	}
+
+	userLookId, err := db.Prepare("select name, gid from users where uid = ?")
+	if err != nil {
+		return nil, err
+	}
+
+	idm := &SQLiteIdm{
+		db:          db,
+		userAdd:     userAdd,
+		userDel:     userDel,
+		userLook:    userLook,
+		userLookId:  userLookId,
+		groupAdd:    groupAdd,
+		groupDel:    groupDel,
+		groupLook:   groupLook,
+		groupLookId: groupLookId,
+		utils:       avfs.OSUtils,
+	}
+
+	adminGroupName := idm.utils.AdminGroupName()
+	adminUserName := idm.utils.AdminUserName()
+
+	idm.adminGroup = &Group{
+		name: adminGroupName,
+		gid:  0,
+	}
+
+	idm.adminUser = &User{
+		name: adminUserName,
+		uid:  0,
+		gid:  0,
 	}
 
 	return idm, nil
 }
 
 func (idm *SQLiteIdm) Close() error {
+	_ = idm.groupAdd.Close()
+	_ = idm.groupDel.Close()
+	_ = idm.groupLook.Close()
+	_ = idm.groupLookId.Close()
+	_ = idm.userAdd.Close()
+	_ = idm.userDel.Close()
+	_ = idm.userLook.Close()
+	_ = idm.userLookId.Close()
 	err := idm.db.Close()
 
 	return err
@@ -102,6 +157,6 @@ func (idm *SQLiteIdm) Features() avfs.Features {
 }
 
 // HasFeature returns true if the file system or identity manager provides a given feature.
-func (idm *SQLiteIdm) HasFeature(feature avfs.Features) bool {
-	return avfs.FeatIdentityMgr&feature == feature
+func (idm *SQLiteIdm) HasFeature(features avfs.Features) bool {
+	return avfs.FeatIdentityMgr&features == features
 }
