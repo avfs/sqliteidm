@@ -3,38 +3,36 @@ on: [push, pull_request]
 
 jobs:
   test:
-    env :
-      GO111MODULE: on
     strategy:
       fail-fast: false
       matrix:
-        go: [1.16.x, 1.17.x]
-        os: [ubuntu-latest, windows-latest]
+        go: [1.17.x, 1.18.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go }}
 
       - name: golangci-lint on linux
         if: ${{ startsWith(matrix.os, 'ubuntu') }}
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v3
 
       - name: Run tests
-        run: go test -run=. -race -v -covermode=atomic -coverprofile=./cover_test.txt ./...
+        run: go test -run=. -race -v -covermode=atomic -coverprofile=./tmp/cover_test.txt ./...
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         env:
           OS: ${{ matrix.os }}
           GO: ${{ matrix.go }}
         with:
-          env_vars: OS,GO
-          files: ./cover_test.txt
+          env_vars: os,go
+          files: ./tmp/cover_test.txt
           flags: unittests
-          verbose: false
+          verbose: true
