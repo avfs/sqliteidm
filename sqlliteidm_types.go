@@ -23,10 +23,18 @@ import (
 )
 
 type SQLiteIdm struct {
-	adminGroup *Group     // Administrator Group.
-	adminUser  *User      // Administrator User.
-	db         *sql.DB    // Database handle.
-	utils      avfs.Utils // Utils regroups common functions used by emulated file systems.
+	adminGroup  *Group     // Administrator Group.
+	adminUser   *User      // Administrator User.
+	db          *sql.DB    // db is the SQLite database handle/
+	userAdd     *sql.Stmt  // userAdd is the prepared statement to add a user.
+	userDel     *sql.Stmt  // userDel is the prepared statement to delete a user.
+	userLook    *sql.Stmt  // userLook is the prepared statement to look up a user by name.
+	userLookId  *sql.Stmt  // userLookId is the prepared statement to look up a user by id.
+	groupAdd    *sql.Stmt  // groupAdd is the prepared statement to add a group.
+	groupDel    *sql.Stmt  // groupDel is the prepared statement to delete a group.
+	groupLook   *sql.Stmt  // groupLook is the prepared statement to look up a group by name.
+	groupLookId *sql.Stmt  // groupLookId is the prepared statement to look up a group by id.
+	utils       avfs.Utils // Utils regroups common functions used by emulated file systems.
 }
 
 // User is the implementation of avfs.UserReader.
