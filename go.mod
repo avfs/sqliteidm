@@ -4,5 +4,5 @@ go 1.17
 
 require (
 	github.com/avfs/avfs v0.30.0
-	github.com/mattn/go-sqlite3 v1.14.12
+	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 )
