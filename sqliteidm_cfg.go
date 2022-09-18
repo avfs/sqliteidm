@@ -25,6 +25,8 @@ import (
 
 // New create a new identity manager.
 func New(db *sql.DB) (*SQLiteIdm, error) {
+	osType := avfs.CurrentOSType()
+
 	err := db.Ping()
 	if err != nil {
 		return nil, err
@@ -112,11 +114,10 @@ func New(db *sql.DB) (*SQLiteIdm, error) {
 		groupDel:    groupDel,
 		groupLook:   groupLook,
 		groupLookId: groupLookId,
-		utils:       avfs.OSUtils,
 	}
 
-	adminGroupName := idm.utils.AdminGroupName()
-	adminUserName := idm.utils.AdminUserName()
+	adminGroupName := avfs.AdminGroupName(osType)
+	adminUserName := avfs.AdminUserName(osType)
 
 	idm.adminGroup = &Group{
 		name: adminGroupName,
